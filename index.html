@@ -1,130 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Beat Blend</title>
-<style>
-    body, html {
-        height: 100%;
-        margin: 0;
-        font-family: 'Arial', sans-serif;
-        background-color: #121212;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .container {
-        width: 100%;
-        max-width: 600px;
-        padding: 20px;
-    }
-    .header, .playlist-container {
-        background-color: #181818;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-    .header {
-        text-align: center;
-    }
-    .header h1 {
-        margin: 0;
-    }
-    .header p {
-        color: #aaa;
-    }
-    .now-playing {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .now-playing > div {
-        flex-grow: 1;
-    }
-    button {
-        background-color: #1db954;
-        border: none;
-        color: white;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 8px;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #1ed760;
-    }
-    .playlist-container {
-        max-height: 400px; /* Set a fixed height */
-        overflow-y: auto; /* Enable vertical scrolling */
-    }
-    .song-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-top: 1px solid #333;
-        padding: 10px 0;
-    }
-    .song-item:first-child {
-        border-top: none;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beat Blend</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+        .header, .playlist-container {
+            background-color: #181818;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .header {
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .header p {
+            color: #aaa;
+        }
+        .now-playing {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .now-playing > div {
+            flex-grow: 1;
+        }
+        button {
+            background-color: #1db954;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1ed760;
+        }
+        .playlist-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .song-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #333;
+            padding: 10px 0;
+        }
+        .song-item:first-child {
+            border-top: none;
+        }
+        #status {
+            margin-top: 20px;
+            color: lime;
+            display: none; 
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <h1>Welcome to Beat Blend</h1>
-        <p>Tired of the same 10 songs playing on Spotify? We fixed it.</p>
-        <button>Authenticate with Spotify</button>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Beat Blend</h1>
+            <p>Tired of the same 10 songs playing on Spotify? We fixed it.</p>
+            <button id="authenticate">Authenticate with Spotify</button>
+            <div id="status"></div>
+        </div>
+        <div class="playlist-container">
+            <!-- Playlist stuff will be added here -->
+        </div>
     </div>
-    <div class="playlist-container">
-        <div class="now-playing">
-            <div>
-                <h2>Now Playing</h2>
-                <p>Song Title</p>
-                <p>Artist Name</p>
-            </div>
-            <button>Shuffle</button>
-        </div>
-        <div class="song-item">
-            <div>
-                <p>Song Title</p>
-                <p>Artist Name</p>
-            </div>
-            <button>Play</button>
-        </div>
-        <div class="song-item">
-            <div>
-                <p>Song Title</p>
-                <p>Artist Name</p>
-            </div>
-            <button>Play</button>
-        </div>
-        <div class="song-item">
-            <div>
-                <p>Song Title</p>
-                <p>Artist Name</p>
-            </div>
-            <button>Play</button>
-        </div>
-        <div class="song-item">
-            <div>
-                <p>Song Title</p>
-                <p>Artist Name</p>
-            </div>
-            <button>Play</button>
-        </div>
-        <div class="song-item">
-            <div>
-                <p>Song Title</p>
-                <p>Artist Name</p>
-            </div>
-            <button>Play</button>
-        </div>
-        <!-- Repeat the song-item div for each song in the playlist -->
-        <!-- Add more song-item divs to simulate a longer playlist -->
-    </div>
-</div>
+    <script>
+        window.addEventListener('load', function() {
+            const hash = window.location.hash.substring(1);
+            const params = new URLSearchParams(hash);
+            const accessToken = params.get('access_token');
+            const expiresIn = params.get('expires_in');
+
+            if (accessToken) {
+                document.getElementById('status').textContent = 'Authenticated successfully! Token: ' + accessToken;
+                document.getElementById('status').style.display = 'block';
+                window.history.pushState("", document.title, window.location.pathname + window.location.search); 
+            }
+        });
+
+        document.getElementById('authenticate').addEventListener('click', function() {
+            const clientId = '9244f45c1b6342cf8c1e57dd56184b47'; 
+            const redirectUri = encodeURIComponent('http://localhost:8000/'); 
+            const scopes = encodeURIComponent([
+                'user-read-private',
+                'user-read-email'
+            ].join(' '));
+
+            const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientId}&scope=${scopes}&redirect_uri=${redirectUri}&show_dialog=true`;
+
+            window.location.href = authUrl;
+        });
+    </script>
 </body>
 </html>
