@@ -61,18 +61,21 @@
             background-color: #1ed760;
         }
         .playlist-container {
-            max-height: 400px;
-            overflow-y: auto;
+            width: 100%; /* Ensure it uses the full width of its container */
+            max-height: 400px; /* Limit the height with overflow control */
+            overflow-y: auto; /* Enable scrolling */
+            padding: 10px; /* Padding inside the container */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Optional: Adds subtle shadow for depth */
         }
-        .song-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid #333;
-            padding: 10px 0;
+
+        .song-item:hover {
+            background-color: #1db954; /* Highlight item on hover */
+            color: #fff; /* White text on hover */
         }
-        .song-item:first-child {
-            border-top: none;
+
+        .song-item:last-child {
+            border-bottom: none; /* Remove bottom border from the last item */
         }
         #controls {
             display: flex;
@@ -102,6 +105,63 @@
         #controls button:hover {
             background-color: #1ed760;
         }
+        .album-cover {
+            align-self: center;
+            border-radius: 4px;
+        }
+
+        .song-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* This will space out the song title and artist */
+            align-items: flex-start;
+            padding: 10px 20px; /* Comfortable padding around items */
+            margin: 5px 0; /* Space between items */
+            color: #ccc; /* Lighter text color for better readability */
+            border-bottom: 1px solid #333; /* Subtle separator */
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+
+        .track-title, .track-artists {
+            margin: 0 5px;
+        }
+
+        .track-title {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .track-artists {
+            color: #ccc;
+        }
+        .artist-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center; 
+            padding: 10px;
+            margin: 5px 0;
+            color: #ccc;
+            border-bottom: 1px solid #333;
+            width: 100%; 
+        }
+
+        .artist-photo {
+            width: 80px; 
+            height: 80px;
+            border-radius: 50%; 
+            object-fit: cover; 
+            margin-bottom: 5px;
+            align-items: center; 
+            justify-content: center;
+        }
+
+        .artist-name {
+            font-weight: bold;
+            color: #fff;
+            text-align: center; 
+            width: 100%; 
+        }
     </style>
 </head>
 <body>
@@ -114,8 +174,8 @@
                 <button id="randomShuffle">True Random Shuffle</button>
                 <button id="recentTracks">Recent Tracks (50)</button>
                 <button id="topArtists">Top 10 Artists (All Time)</button>
-                <button id="topTracks">Top 10 Tracks (All Time)</button>
-                <button id="topAlbums">Top 20 Albums (All Time)</button>
+                <button id="topTracks">Top 20 Tracks (1 Year)</button>
+                <button id="topAlbums">Top 20 Albums (1 Year)</button>
             </div>
             <div id="status"></div>
         </div>
@@ -124,5 +184,6 @@
         </div>
     </div>
     <script src="auth.js"></script>
+    <script src="buttons.js"></script>
 </body>
 </html>

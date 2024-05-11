@@ -5,6 +5,8 @@ window.addEventListener('load', function() {
     const accessToken = params.get('access_token');
 
     if (accessToken) {
+        sessionStorage.setItem('spotifyAccessToken', accessToken); 
+        
         displayControls();
         document.getElementById('authenticate').style.display = 'none'; 
         window.history.pushState("", document.title, window.location.pathname); 
