@@ -2,7 +2,7 @@
 Tired of the same 10 songs playing on Spotify? We fixed it.
 
 
-The True Shuffle functionality is currently a work in progress. All of the other API integrations have been completed and are fully deployed on [Vercel]([url](https://beat-blend-alpha.vercel.app/))
+The True Shuffle functionality is currently a work in progress. All of the other API integrations have been completed and are fully deployed on [Vercel](https://beat-blend-alpha.vercel.app/).
 
 To use the app, please send me the email address you used for your Spotify account. The Spotify API only allows registered users to interact with small projects like this one. 
 
