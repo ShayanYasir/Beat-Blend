@@ -8,6 +8,7 @@
         body, html {
             height: 100%;
             margin: 0;
+            padding: 0;
             font-family: 'Arial', sans-serif;
             background-color: #121212;
             color: white;
@@ -19,6 +20,10 @@
             width: 100%;
             max-width: 600px;
             padding: 20px;
+            justify-content: center; 
+            align-items: center;   
+            margin: 0 auto; 
+
         }
         .header, .playlist-container {
             background-color: #181818;
@@ -69,10 +74,33 @@
         .song-item:first-child {
             border-top: none;
         }
-        #status {
-            margin-top: 20px;
-            color: lime;
-            display: none; 
+        #controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; 
+            width: 100%;
+            max-width: 600px; 
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        #controls button {
+            background-color: #1db954;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px; 
+            text-align: center; 
+            width: 60%;
+            padding: 10px 20px;
+        }
+
+        #controls button:hover {
+            background-color: #1ed760;
         }
     </style>
 </head>
@@ -82,38 +110,19 @@
             <h1>Welcome to Beat Blend</h1>
             <p>Tired of the same 10 songs playing on Spotify? We fixed it.</p>
             <button id="authenticate">Authenticate with Spotify</button>
+            <div id="controls" style="display:none;text-align: center;">
+                <button id="randomShuffle">True Random Shuffle</button>
+                <button id="recentTracks">Recent Tracks (50)</button>
+                <button id="topArtists">Top 10 Artists (All Time)</button>
+                <button id="topTracks">Top 10 Tracks (All Time)</button>
+                <button id="topAlbums">Top 20 Albums (All Time)</button>
+            </div>
             <div id="status"></div>
         </div>
-        <div class="playlist-container">
+        <div class="playlist-container" id="playlist-container">
             <!-- Playlist stuff will be added here -->
         </div>
     </div>
-    <script>
-        window.addEventListener('load', function() {
-            const hash = window.location.hash.substring(1);
-            const params = new URLSearchParams(hash);
-            const accessToken = params.get('access_token');
-            const expiresIn = params.get('expires_in');
-
-            if (accessToken) {
-                document.getElementById('status').textContent = 'Authenticated successfully! Token: ' + accessToken;
-                document.getElementById('status').style.display = 'block';
-                window.history.pushState("", document.title, window.location.pathname + window.location.search); 
-            }
-        });
-
-        document.getElementById('authenticate').addEventListener('click', function() {
-            const clientId = '9244f45c1b6342cf8c1e57dd56184b47'; 
-            const redirectUri = encodeURIComponent('http://localhost:8000/'); 
-            const scopes = encodeURIComponent([
-                'user-read-private',
-                'user-read-email'
-            ].join(' '));
-
-            const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientId}&scope=${scopes}&redirect_uri=${redirectUri}&show_dialog=true`;
-
-            window.location.href = authUrl;
-        });
-    </script>
+    <script src="auth.js"></script>
 </body>
 </html>
