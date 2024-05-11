@@ -29,6 +29,7 @@ document.getElementById('authenticate').addEventListener('click', function() {
     const clientId = '9244f45c1b6342cf8c1e57dd56184b47'; 
     const redirectUri = encodeURIComponent('http://localhost:8000/');
     const scopes = encodeURIComponent([
+        'user-read-recently-played',
         'user-read-playback-state',
         'user-modify-playback-state',
         'user-read-currently-playing',

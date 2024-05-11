@@ -4,18 +4,22 @@ document.addEventListener('DOMContentLoaded', function() {
     async function fetchWebApi(endpoint, method, body = null) {
         const res = await fetch(`https://api.spotify.com/${endpoint}`, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                'Authorization': `Bearer ${sessionStorage.getItem('spotifyAccessToken')}`,
             },
-            method,
+            method: method,
             body: body ? JSON.stringify(body) : null
         });
+        if (!res.ok) {
+            console.error('API request failed:', res.status, await res.text());
+            return {}; 
+        }
         return await res.json();
     }
 
     // TRACKS
     async function getTopTracks() {
         return (await fetchWebApi(
-            'v1/me/top/tracks?time_range=long_term&limit=20', 'GET'
+            'v1/me/top/tracks?time_range=long_term&limit=50', 'GET'
         )).items;
     }
 
@@ -54,12 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById('topTracks').addEventListener('click', displayTopTracks);
-
-    async function getTopArtists() {
-        return (await fetchWebApi(
-            'v1/me/top/artists?time_range=long_term&limit=20', 'GET'
-        )).items;
-    }
 
     // ARTISTS
 
@@ -100,6 +98,54 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // LAST 50 TRACKS
+    async function getRecentlyPlayedTracks() {
+        const response = await fetchWebApi('v1/me/player/recently-played?limit=50', 'GET');
+        return response.items || []; 
+    }
+    
+    async function displayRecentlyPlayedTracks() {
+        const tracks = await getRecentlyPlayedTracks();
+        const playlistContainer = document.getElementById('playlist-container');
+        playlistContainer.innerHTML = '';
+    
+        if (!tracks.length) {
+            console.log('No recently played tracks available.');
+            playlistContainer.innerHTML = '<p>No recently played tracks available.</p>';
+            return;
+        }
+    
+        tracks.forEach(item => {
+            const track = item.track;
+            const trackDiv = document.createElement('div');
+            trackDiv.className = 'song-item';
+            
+            const coverImg = document.createElement('img');
+            coverImg.src = track.album.images.length ? track.album.images[0].url : 'placeholder.jpg';
+            coverImg.alt = `Cover art for ${track.name}`;
+            coverImg.className = 'album-cover';
+            coverImg.style.width = '20%'; 
+            coverImg.style.height = '20%'; 
+            coverImg.style.marginRight = '10px'; 
+            coverImg.style.marginBottom = '10px';
+    
+            const titleSpan = document.createElement('span');
+            titleSpan.textContent = track.name;
+            titleSpan.className = 'track-title';
+    
+            const artistSpan = document.createElement('span');
+            artistSpan.textContent = `By: ${track.artists.map(artist => artist.name).join(', ')}`;
+            artistSpan.className = 'track-artists';
+    
+            trackDiv.appendChild(coverImg);
+            trackDiv.appendChild(titleSpan);
+            trackDiv.appendChild(artistSpan);
+    
+            playlistContainer.appendChild(trackDiv);
+        });
+    }        
+
     document.getElementById('topArtists').addEventListener('click', displayTopArtists);
+    document.getElementById('recentTracks').addEventListener('click', displayRecentlyPlayedTracks);
     document.getElementById('topTracks').addEventListener('click', displayTopTracks);
 });
