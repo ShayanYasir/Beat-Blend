@@ -27,7 +27,12 @@ function displayControls() {
   
 document.getElementById('authenticate').addEventListener('click', function() {
     const clientId = '9244f45c1b6342cf8c1e57dd56184b47'; 
-    const redirectUri = encodeURIComponent('http://localhost:8000/');
+
+    // Determine the correct redirect URI based on the environment
+    const redirectUri = window.location.hostname === 'localhost' 
+                        ? encodeURIComponent('http://localhost:8000/')
+                        : encodeURIComponent('https://beat-blend-alpha.vercel.app/');
+
     const scopes = encodeURIComponent([
         'user-read-recently-played',
         'user-read-playback-state',
