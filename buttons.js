@@ -17,42 +17,42 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // TRACKS
-    async function getTopTracks() {
+    async function getTopTracks(time_range = 'long_term') {
         return (await fetchWebApi(
-            'v1/me/top/tracks?time_range=long_term&limit=50', 'GET'
+            `v1/me/top/tracks?time_range=${time_range}&limit=50`, 'GET'
         )).items;
     }
 
-    async function displayTopTracks() {
-        const tracks = await getTopTracks();
+    async function displayTopTracks(time_range) {
+        const tracks = await getTopTracks(time_range);
         const playlistContainer = document.getElementById('playlist-container');
-        playlistContainer.innerHTML = ''; 
-
+        playlistContainer.innerHTML = '';
+    
         tracks.forEach(track => {
             const trackDiv = document.createElement('div');
             trackDiv.className = 'song-item';
-
+    
             const coverImg = document.createElement('img');
-            coverImg.src = track.album.images[0].url; 
+            coverImg.src = track.album.images[0].url;
             coverImg.alt = `Cover art for ${track.name}`;
             coverImg.className = 'album-cover';
             coverImg.style.width = '20%'; 
             coverImg.style.height = '20%'; 
             coverImg.style.marginRight = '10px'; 
             coverImg.style.marginBottom = '10px';
-
+    
             const titleSpan = document.createElement('span');
             titleSpan.textContent = track.name;
             titleSpan.className = 'track-title';
-
+    
             const artistSpan = document.createElement('span');
             artistSpan.textContent = `By: ${track.artists.map(artist => artist.name).join(', ')}`;
             artistSpan.className = 'track-artists';
-
+    
             trackDiv.appendChild(coverImg);
-            trackDiv.appendChild(titleSpan);            
+            trackDiv.appendChild(titleSpan);
             trackDiv.appendChild(artistSpan);
-
+    
             playlistContainer.appendChild(trackDiv);
         });
     }
@@ -147,5 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('topArtists').addEventListener('click', displayTopArtists);
     document.getElementById('recentTracks').addEventListener('click', displayRecentlyPlayedTracks);
-    document.getElementById('topTracks').addEventListener('click', displayTopTracks);
+    document.getElementById('topTracks').addEventListener('click', () => displayTopTracks('long_term'));
+    document.getElementById('topTracksShort').addEventListener('click', () => displayTopTracks('short_term'));
+    document.getElementById('topTracksMedium').addEventListener('click', () => displayTopTracks('medium_term'));
 });
