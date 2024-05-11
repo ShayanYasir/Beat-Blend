@@ -1,3 +1,5 @@
+let currentAudio = null; 
+
 document.addEventListener('DOMContentLoaded', function() {
     const token = sessionStorage.getItem('spotifyAccessToken'); 
 
@@ -48,10 +50,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const artistSpan = document.createElement('span');
             artistSpan.textContent = `By: ${track.artists.map(artist => artist.name).join(', ')}`;
             artistSpan.className = 'track-artists';
+
+            const playButton = document.createElement('button');
+            playButton.textContent = 'Play Track';
+            playButton.className = 'play-button';  
+            playButton.onclick = () => {
+                if (currentAudio && !currentAudio.paused) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0; 
+                }
+                currentAudio = new Audio(track.preview_url);
+                currentAudio.play();
+            };
     
             trackDiv.appendChild(coverImg);
             trackDiv.appendChild(titleSpan);
             trackDiv.appendChild(artistSpan);
+            trackDiv.appendChild(playButton);
     
             playlistContainer.appendChild(trackDiv);
         });
@@ -136,10 +151,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const artistSpan = document.createElement('span');
             artistSpan.textContent = `By: ${track.artists.map(artist => artist.name).join(', ')}`;
             artistSpan.className = 'track-artists';
-    
+
+            const playButton = document.createElement('button');
+            playButton.textContent = 'Play Track';
+            playButton.className = 'play-button';  
+            playButton.onclick = () => {
+                if (currentAudio && !currentAudio.paused) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0; 
+                }
+                currentAudio = new Audio(track.preview_url);
+                currentAudio.play();
+            };
+            
             trackDiv.appendChild(coverImg);
             trackDiv.appendChild(titleSpan);
             trackDiv.appendChild(artistSpan);
+            trackDiv.appendChild(playButton);
     
             playlistContainer.appendChild(trackDiv);
         });

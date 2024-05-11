@@ -6,7 +6,7 @@ window.addEventListener('load', function() {
 
     if (accessToken) {
         sessionStorage.setItem('spotifyAccessToken', accessToken); 
-        
+        document.getElementById('playlist-container').style.display = 'block'; // Show the playlist container
         displayControls();
         document.getElementById('authenticate').style.display = 'none'; 
         window.history.pushState("", document.title, window.location.pathname); 
